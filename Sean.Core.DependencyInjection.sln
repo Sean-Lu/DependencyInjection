@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sean.Core.DependencyInjection", "src\Sean.Core.DependencyInjection\Sean.Core.DependencyInjection.csproj", "{107B4D0F-9270-4E18-87A5-FC1D6F0BE84C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51136540-C1AF-41D8-82F8-057FEEA8860F}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{B54093DD-6B55-485D-85B3-A657A54425CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetCore", "NetCore", "{573803C5-EA6F-4120-9C41-95C371A36B46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetFramework", "NetFramework", "{25075AAF-FB01-4D0C-ACCF-378089119D54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.NetCore", "examples\NetCore\Example.NetCore\Example.NetCore.csproj", "{A262946E-EBAF-4D63-B4C7-C35E5EAE867D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{107B4D0F-9270-4E18-87A5-FC1D6F0BE84C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{107B4D0F-9270-4E18-87A5-FC1D6F0BE84C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{107B4D0F-9270-4E18-87A5-FC1D6F0BE84C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{107B4D0F-9270-4E18-87A5-FC1D6F0BE84C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A262946E-EBAF-4D63-B4C7-C35E5EAE867D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A262946E-EBAF-4D63-B4C7-C35E5EAE867D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A262946E-EBAF-4D63-B4C7-C35E5EAE867D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A262946E-EBAF-4D63-B4C7-C35E5EAE867D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{573803C5-EA6F-4120-9C41-95C371A36B46} = {B54093DD-6B55-485D-85B3-A657A54425CA}
+		{25075AAF-FB01-4D0C-ACCF-378089119D54} = {B54093DD-6B55-485D-85B3-A657A54425CA}
+		{A262946E-EBAF-4D63-B4C7-C35E5EAE867D} = {573803C5-EA6F-4120-9C41-95C371A36B46}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AEDFA37C-08DD-4ED9-979E-C7EADD068255}
+	EndGlobalSection
+EndGlobal
