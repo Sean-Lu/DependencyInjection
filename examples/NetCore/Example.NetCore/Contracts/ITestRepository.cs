@@ -2,7 +2,7 @@
 
 namespace Example.NetCore.Contracts
 {
-    public interface ITestRepository
+    public interface ITestRepository : IBaseRepository<TestEntity>
     {
         void Add(TestEntity entity);
     }

@@ -8,7 +8,7 @@ using Sean.Utility.Contracts;
 
 namespace Example.NetCore.Repositories
 {
-    public class TestRepository : ITestRepository
+    public class TestRepository : BaseRepository<TestEntity>, ITestRepository
     {
         private readonly ILogger _logger;
 

@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Sean.Core.DependencyInjection
 {
-    public class DIObject
+    public class DIImpl
     {
+        public object ImplementationInstance { get; set; }
         public Type ImplementationType { get; set; }
         public ServiceLifeStyle LifeStyle { get; set; }
     }

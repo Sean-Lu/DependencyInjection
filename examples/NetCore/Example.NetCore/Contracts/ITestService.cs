@@ -1,6 +1,6 @@
 ﻿namespace Example.NetCore.Contracts
 {
-    public interface ITestService
+    public interface ITestService : IBaseService
     {
         void Hello(string name);
     }

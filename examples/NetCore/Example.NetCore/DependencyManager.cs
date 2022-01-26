@@ -1,40 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Example.NetCore.Contracts;
-using Example.NetCore.Repositories;
-using Example.NetCore.Services;
 using Sean.Core.DependencyInjection;
-using Sean.Utility.Contracts;
-using Sean.Utility.Impls.Log;
 
 namespace Example.NetCore
 {
     public class DependencyManager
     {
-        public static IDIContainer Container { get; private set; }
+        public static IDIResolve Container => _container;
 
-        public static void Register()
+        private static IDIContainer _container;
+
+        public static void Register(Action<IDIRegister> action)
         {
-            var builder = new ContainerBuilder();
+            if (_container == null)
+            {
+                var builder = new ContainerBuilder();
 
-            var container = builder.Build();
+                var container = builder.Build();
 
-            // Logger注入
-            //container.RegisterType<ILogger, SimpleLocalLogger>(ServiceLifeStyle.Singleton);
-            container.RegisterType(typeof(ILogger<>), typeof(SimpleLocalLogger<>), ServiceLifeStyle.Transient);// 泛型注入
+                _container = container;
+            }
 
-            // Repositories注入
-            //container.RegisterType<ITestRepository, TestRepository>(ServiceLifeStyle.Transient);
-            container.RegisterAssemblyByInterfaceSuffix(Assembly.GetCallingAssembly(), "Repository", ServiceLifeStyle.Transient);
-
-            // Services注入
-            //container.RegisterType<ITestService, TestService>(ServiceLifeStyle.Transient);
-            container.RegisterAssemblyByInterfaceSuffix(Assembly.GetCallingAssembly(), "Service", ServiceLifeStyle.Transient);
-
-            Container = container;
+            action?.Invoke(_container);
         }
     }
 }
