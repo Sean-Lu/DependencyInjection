@@ -2,6 +2,9 @@
 
 namespace Sean.Core.DependencyInjection
 {
+    /// <summary>
+    /// 依赖注入解析
+    /// </summary>
     public interface IDIResolve
     {
         /// <summary>

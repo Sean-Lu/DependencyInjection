@@ -3,6 +3,9 @@ using Sean.Core.DependencyInjection;
 
 namespace Example.Infrastructure
 {
+    /// <summary>
+    /// 依赖注入容器管理
+    /// </summary>
     public class DependencyManager
     {
         public static IDIResolve Container => _container;
