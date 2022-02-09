@@ -1,4 +1,4 @@
-﻿namespace Example.NetCore.Contracts
+﻿namespace Example.Application.Contracts.Base
 {
     public interface IBaseService
     {

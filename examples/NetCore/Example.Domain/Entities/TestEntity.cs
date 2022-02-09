@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Example.NetCore.Entities
+namespace Example.Domain.Entities
 {
     /// <summary>
     /// 测试表

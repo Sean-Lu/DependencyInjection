@@ -1,7 +1,7 @@
 ﻿using System;
 using Sean.Core.DependencyInjection;
 
-namespace Example.NetCore
+namespace Example.Infrastructure
 {
     public class DependencyManager
     {

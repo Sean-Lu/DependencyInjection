@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Example.NetCore.Contracts;
-using Example.NetCore.Entities;
+﻿using Example.Domain.Contracts;
+using Example.Domain.Entities;
 using Newtonsoft.Json;
+using Sean.Core.DbRepository.Dapper.Impls;
 using Sean.Utility.Contracts;
 
-namespace Example.NetCore.Repositories
+namespace Example.Domain.Repositories
 {
     public class TestRepository : BaseRepository<TestEntity>, ITestRepository
     {
@@ -17,8 +15,9 @@ namespace Example.NetCore.Repositories
             _logger = logger;
         }
 
-        public void Add(TestEntity entity)
+        public void Hello(TestEntity entity)
         {
+            //Add(entity, true);
 
             _logger.LogInfo($"新增数据：{JsonConvert.SerializeObject(entity)}");
         }

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Example.NetCore.Contracts;
-using Example.NetCore.Entities;
+using Example.Application.Contracts;
+using Example.Domain.Contracts;
+using Example.Domain.Entities;
 using Sean.Utility.Contracts;
 
-namespace Example.NetCore.Services
+namespace Example.Application.Services
 {
     public class TestService : ITestService
     {
@@ -25,7 +24,7 @@ namespace Example.NetCore.Services
         {
             _logger.LogInfo($"你好！{name}");
 
-            _testRepository.Add(new TestEntity
+            _testRepository.Hello(new TestEntity
             {
                 Id = 100010,
                 CreateTime = DateTime.Now

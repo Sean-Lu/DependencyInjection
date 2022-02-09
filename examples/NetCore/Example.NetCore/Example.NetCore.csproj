@@ -6,21 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Sean.Core.DependencyInjection\Sean.Core.DependencyInjection.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Sean.Utility" Version="2.1.2-beta2022011601" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
-    <!--<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />-->
+    <ProjectReference Include="..\Example.Application\Example.Application.csproj" />
+    <ProjectReference Include="..\Example.Infrastructure\Example.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

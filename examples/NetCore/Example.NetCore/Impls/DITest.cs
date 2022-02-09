@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using Example.NetCore.Contracts;
-using Example.NetCore.Repositories;
-using Example.NetCore.Services;
+using Example.Application.Contracts;
+using Example.Application.Extensions;
+using Example.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Sean.Core.DependencyInjection;
 using Sean.Utility.Contracts;
@@ -35,16 +35,7 @@ namespace Example.NetCore.Impls
                 //container.RegisterType<ILogger, SimpleLocalLogger>(ServiceLifeStyle.Singleton);
                 container.RegisterType(typeof(ILogger<>), typeof(SimpleLocalLogger<>), ServiceLifeStyle.Transient);// 泛型注入
 
-                // Repositories注入
-                //container.RegisterType<ITestRepository, TestRepository>(ServiceLifeStyle.Transient);
-                //container.RegisterAssemblyByInterfaceSuffix(Assembly.GetExecutingAssembly(), "Repository", ServiceLifeStyle.Transient);
-                container.RegisterAssemblyByInheritedInterfaceType(Assembly.GetExecutingAssembly(), typeof(IBaseRepository), ServiceLifeStyle.Transient);
-                //container.RegisterAssemblyByInheritedInterfaceType(Assembly.GetExecutingAssembly(), typeof(IBaseRepository<>), ServiceLifeStyle.Transient);
-
-                // Services注入
-                //container.RegisterType<ITestService, TestService>(ServiceLifeStyle.Transient);
-                //container.RegisterAssemblyByInterfaceSuffix(Assembly.GetExecutingAssembly(), "Service", ServiceLifeStyle.Transient);
-                container.RegisterAssemblyByInheritedInterfaceType(Assembly.GetExecutingAssembly(), typeof(IBaseService), ServiceLifeStyle.Transient);
+                container.AddApplicationDI();
             });
             #endregion
 
@@ -56,7 +47,7 @@ namespace Example.NetCore.Impls
             logger.LogInfo($"LogToConsole：{loggerSection.GetValue<bool>("LogToConsole")}");
 
             ITestService testService = DependencyManager.Container.Resolve<ITestService>();
-            testService.Hello("Sean");
+            testService.Hello("靓仔！！！");
         }
     }
 }

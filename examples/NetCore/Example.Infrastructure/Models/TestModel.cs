@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Example.NetCore.Dtos
+namespace Example.Infrastructure.Models
 {
-    public class TestDto
+    public class TestModel
     {
         public long Id { get; set; }
         /// <summary>

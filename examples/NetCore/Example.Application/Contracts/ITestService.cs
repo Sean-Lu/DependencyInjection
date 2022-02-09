@@ -1,4 +1,6 @@
-﻿namespace Example.NetCore.Contracts
+﻿using Example.Application.Contracts.Base;
+
+namespace Example.Application.Contracts
 {
     public interface ITestService : IBaseService
     {
