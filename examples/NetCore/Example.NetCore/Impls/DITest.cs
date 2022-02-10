@@ -31,10 +31,6 @@ namespace Example.NetCore.Impls
                 container.RegisterType<IConfiguration>(configuration);
                 //container.RegisterType<IConfiguration>(diContainer => configuration);
 
-                // Logger注入
-                //container.RegisterType<ILogger, SimpleLocalLogger>(ServiceLifeStyle.Singleton);
-                container.RegisterType(typeof(ILogger<>), typeof(SimpleLocalLogger<>), ServiceLifeStyle.Transient);// 泛型注入
-
                 container.AddApplicationDI();
             });
             #endregion

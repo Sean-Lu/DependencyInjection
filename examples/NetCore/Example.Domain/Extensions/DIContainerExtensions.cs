@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Example.Domain.Contracts;
 using Example.Domain.Repositories;
+using Example.Infrastructure.Extensions;
 using Sean.Core.DbRepository.Contracts;
 using Sean.Core.DependencyInjection;
 
@@ -19,6 +20,8 @@ namespace Example.Domain.Extensions
             container.RegisterAssemblyByInterfaceSuffix(Assembly.GetExecutingAssembly(), "Repository", ServiceLifeStyle.Transient);
             //container.RegisterAssemblyByInheritedInterfaceType(Assembly.GetExecutingAssembly(), typeof(IBaseRepository), ServiceLifeStyle.Transient);
             //container.RegisterAssemblyByInheritedInterfaceType(Assembly.GetExecutingAssembly(), typeof(IBaseRepository<>), ServiceLifeStyle.Transient);
+
+            container.AddInfrastructureDI();
         }
     }
 }
