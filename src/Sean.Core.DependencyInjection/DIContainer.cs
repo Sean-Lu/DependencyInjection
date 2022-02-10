@@ -193,7 +193,7 @@ namespace Sean.Core.DependencyInjection
             var ctorArray = implementationType.GetConstructors();
             var ctor = ctorArray.Count(c => c.IsDefined(typeof(DependencyInjectionAttribute), true)) > 0
                 ? ctorArray.FirstOrDefault(c => c.IsDefined(typeof(DependencyInjectionAttribute), true))
-                : ctorArray.OrderBy(c => c.GetParameters().Length).FirstOrDefault();
+                : ctorArray.OrderByDescending(c => c.GetParameters().Length).FirstOrDefault();
 
             var paraList = new List<object>();
             if (ctor != null)
