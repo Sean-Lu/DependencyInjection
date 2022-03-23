@@ -1,7 +1,7 @@
 ﻿using Example.Domain.Contracts;
 using Example.Domain.Entities;
 using Newtonsoft.Json;
-using Sean.Core.DbRepository.Dapper.Impls;
+using Sean.Core.DbRepository;
 using Sean.Utility.Contracts;
 
 namespace Example.Domain.Repositories

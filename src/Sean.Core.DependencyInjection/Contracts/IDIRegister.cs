@@ -27,9 +27,8 @@ namespace Sean.Core.DependencyInjection
         /// 注册类型
         /// </summary>
         /// <typeparam name="TService"></typeparam>
-        /// <param name="implementationType"></param>
-        /// <param name="style"></param>
-        void RegisterType<TService>(TService implementationType);
+        /// <param name="implementationInstance"></param>
+        void RegisterType<TService>(TService implementationInstance);
 
         /// <summary>
         /// 注册类型

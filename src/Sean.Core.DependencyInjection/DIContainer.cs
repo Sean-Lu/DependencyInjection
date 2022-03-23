@@ -11,7 +11,6 @@ namespace Sean.Core.DependencyInjection
         public ConcurrentDictionary<Type, DIImpl> DITypeDictionary => _diTypeDictionary;
 
         private readonly ConcurrentDictionary<Type, DIImpl> _diTypeDictionary = new();
-        private readonly ConcurrentDictionary<Type, Func<IDIContainer, object>> _diTypeFuncDictionary = new();
 
         private static readonly ConcurrentDictionary<Type, object> _diSingletonDictionary = new();
 
@@ -41,14 +40,13 @@ namespace Sean.Core.DependencyInjection
         /// 注册类型
         /// </summary>
         /// <typeparam name="TService"></typeparam>
-        /// <param name="implementationType"></param>
-        /// <param name="style"></param>
-        public void RegisterType<TService>(TService implementationType)
+        /// <param name="implementationInstance"></param>
+        public void RegisterType<TService>(TService implementationInstance)
         {
             var obj = new DIImpl
             {
-                ImplementationInstance = implementationType,
-                ImplementationType = implementationType.GetType(),
+                ImplementationInstance = implementationInstance,
+                ImplementationType = implementationInstance.GetType(),
                 LifeStyle = ServiceLifeStyle.Singleton
             };
             _diTypeDictionary.AddOrUpdate(typeof(TService), obj, (key, value) => obj);
@@ -71,7 +69,12 @@ namespace Sean.Core.DependencyInjection
         /// <param name="func"></param>
         public void RegisterType(Type type, Func<IDIContainer, object> func)
         {
-            _diTypeFuncDictionary.AddOrUpdate(type, func, (key, value) => func);
+            var obj = new DIImpl
+            {
+                ImplementationFactory = func,
+                LifeStyle = ServiceLifeStyle.Transient
+            };
+            _diTypeDictionary.AddOrUpdate(type, obj, (key, value) => obj);
         }
 
         /// <summary>
@@ -154,25 +157,25 @@ namespace Sean.Core.DependencyInjection
             {
                 // 泛型解析
                 var genericTypeDefinition = serviceType.GetGenericTypeDefinition();
-                if (_diTypeFuncDictionary.TryGetValue(genericTypeDefinition, out var func) && func != null)
-                {
-                    return func(this);
-                }
                 if (!_diTypeDictionary.TryGetValue(genericTypeDefinition, out diImpl) || diImpl == null)
                 {
                     throw new UnresolvedTypeException(genericTypeDefinition, $"无法解析的类型：{genericTypeDefinition.FullName}");
+                }
+                if (diImpl.ImplementationFactory != null)
+                {
+                    return diImpl.ImplementationFactory(this);
                 }
                 genericArguments = serviceType.GetGenericArguments();
             }
             else
             {
-                if (_diTypeFuncDictionary.TryGetValue(serviceType, out var func) && func != null)
-                {
-                    return func(this);
-                }
                 if (!_diTypeDictionary.TryGetValue(serviceType, out diImpl) || diImpl == null)
                 {
                     throw new UnresolvedTypeException(serviceType, $"无法解析的类型：{serviceType.FullName}");
+                }
+                if (diImpl.ImplementationFactory != null)
+                {
+                    return diImpl.ImplementationFactory(this);
                 }
             }
 
@@ -191,9 +194,9 @@ namespace Sean.Core.DependencyInjection
 
             var implementationType = diImpl.ImplementationType;
             var ctorArray = implementationType.GetConstructors();
-            var ctor = ctorArray.Count(c => c.IsDefined(typeof(DependencyInjectionAttribute), true)) > 0
-                ? ctorArray.FirstOrDefault(c => c.IsDefined(typeof(DependencyInjectionAttribute), true))
-                : ctorArray.OrderByDescending(c => c.GetParameters().Length).FirstOrDefault();
+            var ctor = ctorArray.FirstOrDefault(c => c.IsDefined(typeof(DependencyInjectionAttribute), true))
+                ?? (ctorArray.FirstOrDefault(c => c.GetParameters().Length == 0)
+                    ?? ctorArray.OrderByDescending(c => c.GetParameters().Length).FirstOrDefault());
 
             var paraList = new List<object>();
             if (ctor != null)

@@ -1,18 +1,21 @@
 ﻿namespace Sean.Core.DependencyInjection
 {
+    /// <summary>
+    /// 生命周期类型
+    /// </summary>
     public enum ServiceLifeStyle
     {
         /// <summary>
         /// 瞬时
         /// </summary>
-        Transient,
+        Transient = 0,
         /// <summary>
-        /// 范围
+        /// 作用域
         /// </summary>
-        //Scoped,
+        //Scoped = 1,
         /// <summary>
         /// 单例
         /// </summary>
-        Singleton
+        Singleton = 2
     }
 }

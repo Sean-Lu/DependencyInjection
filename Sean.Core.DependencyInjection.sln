@@ -18,11 +18,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetFramework", "NetFramewor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.NetCore", "examples\NetCore\Example.NetCore\Example.NetCore.csproj", "{A262946E-EBAF-4D63-B4C7-C35E5EAE867D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Application", "examples\NetCore\Example.Application\Example.Application.csproj", "{1D9EF7A3-13FF-403A-B58A-E21A2DB9011F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Application", "examples\NetCore\Example.Application\Example.Application.csproj", "{1D9EF7A3-13FF-403A-B58A-E21A2DB9011F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Domain", "examples\NetCore\Example.Domain\Example.Domain.csproj", "{F74DA026-9A98-43DF-9D00-E27A05816348}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Domain", "examples\NetCore\Example.Domain\Example.Domain.csproj", "{F74DA026-9A98-43DF-9D00-E27A05816348}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Infrastructure", "examples\NetCore\Example.Infrastructure\Example.Infrastructure.csproj", "{A929A3E2-6E7D-4041-A0D4-DF65F36721AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Infrastructure", "examples\NetCore\Example.Infrastructure\Example.Infrastructure.csproj", "{A929A3E2-6E7D-4041-A0D4-DF65F36721AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{D1408F7E-383D-4A75-B12C-855D3FB01E6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

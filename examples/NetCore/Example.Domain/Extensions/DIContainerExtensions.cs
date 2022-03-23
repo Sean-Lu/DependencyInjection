@@ -2,7 +2,7 @@
 using Example.Domain.Contracts;
 using Example.Domain.Repositories;
 using Example.Infrastructure.Extensions;
-using Sean.Core.DbRepository.Contracts;
+using Sean.Core.DbRepository;
 using Sean.Core.DependencyInjection;
 
 namespace Example.Domain.Extensions
