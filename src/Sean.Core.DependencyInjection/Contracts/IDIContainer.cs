@@ -8,6 +8,9 @@ namespace Sean.Core.DependencyInjection
     /// </summary>
     public interface IDIContainer : IDIRegister, IDIResolve
     {
-        ConcurrentDictionary<Type, DIImpl> DITypeDictionary { get; }
+        /// <summary>
+        /// 依赖注入类型映射关系
+        /// </summary>
+        ConcurrentDictionary<Type, DIImpl> DITypeMap { get; }
     }
 }

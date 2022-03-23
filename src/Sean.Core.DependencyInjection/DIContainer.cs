@@ -8,11 +8,12 @@ namespace Sean.Core.DependencyInjection
 {
     public class DIContainer : IDIContainer
     {
-        public ConcurrentDictionary<Type, DIImpl> DITypeDictionary => _diTypeDictionary;
+        public ConcurrentDictionary<Type, DIImpl> DITypeMap => _diTypeMap;
 
-        private readonly ConcurrentDictionary<Type, DIImpl> _diTypeDictionary = new();
-
-        private static readonly ConcurrentDictionary<Type, object> _diSingletonDictionary = new();
+        /// <summary>
+        /// 依赖注入类型映射关系
+        /// </summary>
+        private readonly ConcurrentDictionary<Type, DIImpl> _diTypeMap = new();
 
         #region 注册类型
         /// <summary>
@@ -29,11 +30,11 @@ namespace Sean.Core.DependencyInjection
         /// <summary>
         /// 注册类型
         /// </summary>
-        /// <typeparam name="TService"></typeparam>
+        /// <typeparam name="TImplementation"></typeparam>
         /// <param name="style"></param>
-        public void RegisterType<TService>(ServiceLifeStyle style)
+        public void RegisterType<TImplementation>(ServiceLifeStyle style)
         {
-            RegisterType(typeof(TService), typeof(TService), style);
+            RegisterType(typeof(TImplementation), typeof(TImplementation), style);
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace Sean.Core.DependencyInjection
                 ImplementationType = implementationInstance.GetType(),
                 LifeStyle = ServiceLifeStyle.Singleton
             };
-            _diTypeDictionary.AddOrUpdate(typeof(TService), obj, (key, value) => obj);
+            _diTypeMap.AddOrUpdate(typeof(TService), obj, (key, value) => obj);
         }
 
         /// <summary>
@@ -65,16 +66,16 @@ namespace Sean.Core.DependencyInjection
         /// <summary>
         /// 注册类型
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="serviceType"></param>
         /// <param name="func"></param>
-        public void RegisterType(Type type, Func<IDIContainer, object> func)
+        public void RegisterType(Type serviceType, Func<IDIContainer, object> func)
         {
             var obj = new DIImpl
             {
                 ImplementationFactory = func,
                 LifeStyle = ServiceLifeStyle.Transient
             };
-            _diTypeDictionary.AddOrUpdate(type, obj, (key, value) => obj);
+            _diTypeMap.AddOrUpdate(serviceType, obj, (key, value) => obj);
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace Sean.Core.DependencyInjection
                 ImplementationType = implementationType,
                 LifeStyle = style
             };
-            _diTypeDictionary.AddOrUpdate(serviceType, obj, (key, value) => obj);
+            _diTypeMap.AddOrUpdate(serviceType, obj, (key, value) => obj);
         }
 
         /// <summary>
@@ -136,11 +137,11 @@ namespace Sean.Core.DependencyInjection
         /// <summary>
         /// 构造函数注入解析
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TService"></typeparam>
         /// <returns></returns>
-        public T Resolve<T>()
+        public TService Resolve<TService>()
         {
-            return (T)Resolve(typeof(T));
+            return (TService)Resolve(typeof(TService));
         }
 
         /// <summary>
@@ -157,7 +158,7 @@ namespace Sean.Core.DependencyInjection
             {
                 // 泛型解析
                 var genericTypeDefinition = serviceType.GetGenericTypeDefinition();
-                if (!_diTypeDictionary.TryGetValue(genericTypeDefinition, out diImpl) || diImpl == null)
+                if (!_diTypeMap.TryGetValue(genericTypeDefinition, out diImpl) || diImpl == null)
                 {
                     throw new UnresolvedTypeException(genericTypeDefinition, $"无法解析的类型：{genericTypeDefinition.FullName}");
                 }
@@ -169,7 +170,7 @@ namespace Sean.Core.DependencyInjection
             }
             else
             {
-                if (!_diTypeDictionary.TryGetValue(serviceType, out diImpl) || diImpl == null)
+                if (!_diTypeMap.TryGetValue(serviceType, out diImpl) || diImpl == null)
                 {
                     throw new UnresolvedTypeException(serviceType, $"无法解析的类型：{serviceType.FullName}");
                 }
@@ -186,41 +187,87 @@ namespace Sean.Core.DependencyInjection
 
             if (diImpl.LifeStyle == ServiceLifeStyle.Singleton)
             {
-                if (_diSingletonDictionary.TryGetValue(serviceType, out result) && result != null)
+                if (DICacheManager.GetSingletonInstanceObject(serviceType, out result) && result != null)// 先尝试从单例实例缓存中获取
                 {
                     return result;
                 }
             }
 
             var implementationType = diImpl.ImplementationType;
-            var ctorArray = implementationType.GetConstructors();
-            var ctor = ctorArray.FirstOrDefault(c => c.IsDefined(typeof(DependencyInjectionAttribute), true))
-                ?? (ctorArray.FirstOrDefault(c => c.GetParameters().Length == 0)
-                    ?? ctorArray.OrderByDescending(c => c.GetParameters().Length).FirstOrDefault());
 
-            var paraList = new List<object>();
-            if (ctor != null)
+            #region 递归解析构造函数参数
+            var ctorArray = implementationType.GetConstructors();
+            List<object> ctorParaList = null;
+            if (ctorArray.Length <= 1)
             {
-                foreach (var para in ctor.GetParameters())
+                var ctor = ctorArray.FirstOrDefault();
+                ctorParaList = ResolveConstructorParameters(ctor);
+            }
+            else
+            {
+                var ctor = ctorArray.FirstOrDefault(c => c.IsDefined(typeof(DependencyInjectionAttribute), true))
+                           ?? ctorArray.FirstOrDefault(c => c.GetParameters().Length == 0);// 无参构造函数
+                if (ctor != null)
                 {
-                    var paraInterfaceType = para.ParameterType;
-                    var oPara = Resolve(paraInterfaceType);
-                    paraList.Add(oPara);
+                    ctorParaList = ResolveConstructorParameters(ctor);
+                }
+                else
+                {
+                    // 按参数数量倒序遍历全部有参构造函数，直到找到可以提供所有参数的构造函数（优先解析参数数量最多的构造函数）。
+                    var ctors = ctorArray.OrderByDescending(c => c.GetParameters().Length).ToList();
+                    for (var i = 0; i < ctors.Count; i++)
+                    {
+                        var constructorInfo = ctors[i];
+                        try
+                        {
+                            ctorParaList = ResolveConstructorParameters(constructorInfo);
+                            break;
+                        }
+                        catch (UnresolvedTypeException)
+                        {
+                            if (i + 1 >= ctors.Count)
+                            {
+                                throw;
+                            }
+                        }
+                    }
                 }
             }
+            #endregion
 
             if (serviceType.IsGenericType && genericArguments != null)
             {
                 implementationType = implementationType.MakeGenericType(genericArguments);
             }
-            result = Activator.CreateInstance(implementationType, paraList.ToArray());
+            result = Activator.CreateInstance(implementationType, ctorParaList?.ToArray());
             if (diImpl.LifeStyle == ServiceLifeStyle.Singleton)
             {
-                _diSingletonDictionary.AddOrUpdate(serviceType, result, (key, value) => result);
+                DICacheManager.AddOrUpdateSingletonInstanceObject(serviceType, result);// 更新单例实例缓存
             }
             return result;
         }
         #endregion
+
+        #region Private method
+        private List<object> ResolveConstructorParameters(ConstructorInfo ctor)
+        {
+            if (ctor == null) return null;
+
+            var parameters = ctor.GetParameters();
+            if (!parameters.Any())
+            {
+                return null;
+            }
+
+            var ctorParaList = new List<object>();
+            foreach (var para in parameters)
+            {
+                var paraInterfaceType = para.ParameterType;
+                var oPara = Resolve(paraInterfaceType);
+                ctorParaList.Add(oPara);
+            }
+            return ctorParaList;
+        }
 
         private bool IsAssignableFrom(Type implType, Type baseType)
         {
@@ -283,5 +330,6 @@ namespace Sean.Core.DependencyInjection
 
             return count;
         }
+        #endregion
     }
 }

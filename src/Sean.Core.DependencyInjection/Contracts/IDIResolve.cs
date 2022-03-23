@@ -10,9 +10,9 @@ namespace Sean.Core.DependencyInjection
         /// <summary>
         /// 构造函数注入解析
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TService"></typeparam>
         /// <returns></returns>
-        T Resolve<T>();
+        TService Resolve<TService>();
 
         /// <summary>
         /// 构造函数注入解析

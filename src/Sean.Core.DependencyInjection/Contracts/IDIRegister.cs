@@ -19,9 +19,9 @@ namespace Sean.Core.DependencyInjection
         /// <summary>
         /// 注册类型
         /// </summary>
-        /// <typeparam name="TService"></typeparam>
+        /// <typeparam name="TImplementation"></typeparam>
         /// <param name="style"></param>
-        void RegisterType<TService>(ServiceLifeStyle style);
+        void RegisterType<TImplementation>(ServiceLifeStyle style);
 
         /// <summary>
         /// 注册类型
@@ -40,9 +40,9 @@ namespace Sean.Core.DependencyInjection
         /// <summary>
         /// 注册类型
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="serviceType"></param>
         /// <param name="func"></param>
-        void RegisterType(Type type, Func<IDIContainer, object> func);
+        void RegisterType(Type serviceType, Func<IDIContainer, object> func);
 
         /// <summary>
         /// 注册类型
