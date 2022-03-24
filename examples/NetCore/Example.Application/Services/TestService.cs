@@ -23,12 +23,7 @@ namespace Example.Application.Services
         public void Hello(string name)
         {
             _logger.LogInfo($"你好！{name}");
-
-            _testRepository.Hello(new TestEntity
-            {
-                Id = 100010,
-                CreateTime = DateTime.Now
-            });
+            _testRepository.Hello();
         }
     }
 }

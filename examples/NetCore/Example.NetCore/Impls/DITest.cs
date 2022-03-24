@@ -40,7 +40,7 @@ namespace Example.NetCore.Impls
 
             IConfiguration configuration = DependencyManager.Container.Resolve<IConfiguration>();
             var loggerSection = configuration.GetSection("SimpleLocalLoggerOptions");
-            logger.LogInfo($"LogToConsole：{loggerSection.GetValue<bool>("LogToConsole")}");
+            logger.LogInfo($"Logger configuration: [{nameof(SimpleLocalLoggerOptions.LogToConsole)}:{loggerSection.GetValue<bool>(nameof(SimpleLocalLoggerOptions.LogToConsole))}] [{nameof(SimpleLocalLoggerOptions.LogToLocalFile)}:{loggerSection.GetValue<bool>(nameof(SimpleLocalLoggerOptions.LogToLocalFile))}]");
 
             ITestService testService = DependencyManager.Container.Resolve<ITestService>();
             testService.Hello("靓仔！！！");

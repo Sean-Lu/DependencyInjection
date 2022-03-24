@@ -7,7 +7,7 @@ namespace Example.Domain.Entities
     /// <summary>
     /// 测试表
     /// </summary>
-    [Table("test", Schema = "public")]
+    [Table("Test", Schema = "public")]
     public class TestEntity
     {
         /// <summary>

@@ -5,6 +5,6 @@ namespace Example.Domain.Contracts
 {
     public interface ITestRepository : IBaseRepository<TestEntity>
     {
-        void Hello(TestEntity entity);
+        void Hello();
     }
 }
