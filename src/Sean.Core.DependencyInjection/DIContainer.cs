@@ -151,124 +151,19 @@ namespace Sean.Core.DependencyInjection
         /// <returns></returns>
         public object Resolve(Type serviceType)
         {
-            object result;
-            DIImpl diImpl;
-            Type[] genericArguments = null;
-            if (serviceType.IsGenericType)
+            var diObservers = new LinkedList<DIObserver>();
+            var type = serviceType.IsGenericType && !serviceType.IsGenericTypeDefinition
+                ? serviceType.GetGenericTypeDefinition()
+                : serviceType;
+            diObservers.AddLast(new DIObserver
             {
-                // 泛型解析
-                var genericTypeDefinition = serviceType.GetGenericTypeDefinition();
-                if (!_diTypeMap.TryGetValue(genericTypeDefinition, out diImpl) || diImpl == null)
-                {
-                    throw new UnresolvedTypeException(genericTypeDefinition, $"无法解析的类型：{genericTypeDefinition.FullName}");
-                }
-                if (diImpl.ImplementationFactory != null)
-                {
-                    return diImpl.ImplementationFactory(this);
-                }
-                genericArguments = serviceType.GetGenericArguments();
-            }
-            else
-            {
-                if (!_diTypeMap.TryGetValue(serviceType, out diImpl) || diImpl == null)
-                {
-                    throw new UnresolvedTypeException(serviceType, $"无法解析的类型：{serviceType.FullName}");
-                }
-                if (diImpl.ImplementationFactory != null)
-                {
-                    return diImpl.ImplementationFactory(this);
-                }
-            }
-
-            if (diImpl.ImplementationInstance != null)
-            {
-                return diImpl.ImplementationInstance;
-            }
-
-            if (diImpl.LifeStyle == ServiceLifeStyle.Singleton)
-            {
-                if (DICacheManager.GetSingletonInstanceObject(serviceType, out result) && result != null)// 先尝试从单例实例缓存中获取
-                {
-                    return result;
-                }
-            }
-
-            var implementationType = diImpl.ImplementationType;
-
-            #region 递归解析构造函数参数
-            var ctorArray = implementationType.GetConstructors();
-            List<object> ctorParaList = null;
-            if (ctorArray.Length <= 1)
-            {
-                var ctor = ctorArray.FirstOrDefault();
-                ctorParaList = ResolveConstructorParameters(ctor);
-            }
-            else
-            {
-                var ctor = ctorArray.FirstOrDefault(c => c.IsDefined(typeof(DependencyInjectionAttribute), true))
-                           ?? ctorArray.FirstOrDefault(c => c.GetParameters().Length == 0);// 无参构造函数
-                if (ctor != null)
-                {
-                    ctorParaList = ResolveConstructorParameters(ctor);
-                }
-                else
-                {
-                    // 按参数数量倒序遍历全部有参构造函数，直到找到可以提供所有参数的构造函数（优先解析参数数量最多的构造函数）。
-                    var ctors = ctorArray.OrderByDescending(c => c.GetParameters().Length).ToList();
-                    for (var i = 0; i < ctors.Count; i++)
-                    {
-                        var constructorInfo = ctors[i];
-                        try
-                        {
-                            ctorParaList = ResolveConstructorParameters(constructorInfo);
-                            break;
-                        }
-                        catch (UnresolvedTypeException)
-                        {
-                            if (i + 1 >= ctors.Count)
-                            {
-                                throw;
-                            }
-                        }
-                    }
-                }
-            }
-            #endregion
-
-            if (serviceType.IsGenericType && genericArguments != null)
-            {
-                implementationType = implementationType.MakeGenericType(genericArguments);
-            }
-            result = Activator.CreateInstance(implementationType, ctorParaList?.ToArray());
-            if (diImpl.LifeStyle == ServiceLifeStyle.Singleton)
-            {
-                DICacheManager.AddOrUpdateSingletonInstanceObject(serviceType, result);// 更新单例实例缓存
-            }
-            return result;
+                ServiceType = type
+            });
+            return DIResolveManager.Resolve(this, serviceType, diObservers);
         }
         #endregion
 
         #region Private method
-        private List<object> ResolveConstructorParameters(ConstructorInfo ctor)
-        {
-            if (ctor == null) return null;
-
-            var parameters = ctor.GetParameters();
-            if (!parameters.Any())
-            {
-                return null;
-            }
-
-            var ctorParaList = new List<object>();
-            foreach (var para in parameters)
-            {
-                var paraInterfaceType = para.ParameterType;
-                var oPara = Resolve(paraInterfaceType);
-                ctorParaList.Add(oPara);
-            }
-            return ctorParaList;
-        }
-
         private bool IsAssignableFrom(Type implType, Type baseType)
         {
             if (implType == null || baseType == null)

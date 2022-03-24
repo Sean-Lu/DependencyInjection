@@ -9,7 +9,7 @@
 	  <Description>IOC: Dependency Injection.</Description>
 	  <PackageProjectUrl>https://github.com/Sean-Lu/DependencyInjection</PackageProjectUrl>
 	  <LangVersion>latest</LangVersion>
-	  <Version>1.0.1-beta</Version>
+	  <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>

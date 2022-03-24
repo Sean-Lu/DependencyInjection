@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sean.Core.DependencyInjection.Test.Contracts;
 
 namespace Sean.Core.DependencyInjection.Test
@@ -14,7 +15,15 @@ namespace Sean.Core.DependencyInjection.Test
         {
             Assert.ThrowsException<CircularDependencyException>(() =>
             {
-                IAService aService = DependencyManager.Container.Resolve<IAService>();
+                try
+                {
+                    IAService aService = DependencyManager.Container.Resolve<IAService>();
+                }
+                catch (CircularDependencyException ex)
+                {
+                    Console.WriteLine(ex);
+                    throw;
+                }
             });
         }
     }
