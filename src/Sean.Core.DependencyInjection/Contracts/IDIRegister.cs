@@ -56,7 +56,7 @@ namespace Sean.Core.DependencyInjection
         /// 注册指定程序集中符合条件的所有类型
         /// </summary>
         /// <param name="assembly"></param>
-        /// <param name="interfaceSuffix">接口后缀，如果：Service、Repository等</param>
+        /// <param name="interfaceSuffix">接口后缀，如：Service、Repository</param>
         /// <param name="style"></param>
         /// <param name="filter"></param>
         /// <returns>成功注册的类型数量</returns>

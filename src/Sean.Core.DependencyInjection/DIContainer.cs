@@ -16,32 +16,16 @@ namespace Sean.Core.DependencyInjection
         private readonly ConcurrentDictionary<Type, DIImpl> _diTypeMap = new();
 
         #region 注册类型
-        /// <summary>
-        /// 注册类型
-        /// </summary>
-        /// <typeparam name="TService"></typeparam>
-        /// <typeparam name="TImplementation"></typeparam>
-        /// <param name="style"></param>
         public void RegisterType<TService, TImplementation>(ServiceLifeStyle style)
         {
             RegisterType(typeof(TService), typeof(TImplementation), style);
         }
 
-        /// <summary>
-        /// 注册类型
-        /// </summary>
-        /// <typeparam name="TImplementation"></typeparam>
-        /// <param name="style"></param>
         public void RegisterType<TImplementation>(ServiceLifeStyle style)
         {
             RegisterType(typeof(TImplementation), typeof(TImplementation), style);
         }
 
-        /// <summary>
-        /// 注册类型
-        /// </summary>
-        /// <typeparam name="TService"></typeparam>
-        /// <param name="implementationInstance"></param>
         public void RegisterType<TService>(TService implementationInstance)
         {
             var obj = new DIImpl
@@ -53,21 +37,11 @@ namespace Sean.Core.DependencyInjection
             _diTypeMap.AddOrUpdate(typeof(TService), obj, (key, value) => obj);
         }
 
-        /// <summary>
-        /// 注册类型
-        /// </summary>
-        /// <typeparam name="TService"></typeparam>
-        /// <param name="func"></param>
         public void RegisterType<TService>(Func<IDIContainer, object> func)
         {
             RegisterType(typeof(TService), func);
         }
 
-        /// <summary>
-        /// 注册类型
-        /// </summary>
-        /// <param name="serviceType"></param>
-        /// <param name="func"></param>
         public void RegisterType(Type serviceType, Func<IDIContainer, object> func)
         {
             var obj = new DIImpl
@@ -78,12 +52,6 @@ namespace Sean.Core.DependencyInjection
             _diTypeMap.AddOrUpdate(serviceType, obj, (key, value) => obj);
         }
 
-        /// <summary>
-        /// 注册类型
-        /// </summary>
-        /// <param name="serviceType"></param>
-        /// <param name="implementationType"></param>
-        /// <param name="style"></param>
         public void RegisterType(Type serviceType, Type implementationType, ServiceLifeStyle style)
         {
             var obj = new DIImpl
@@ -94,14 +62,6 @@ namespace Sean.Core.DependencyInjection
             _diTypeMap.AddOrUpdate(serviceType, obj, (key, value) => obj);
         }
 
-        /// <summary>
-        /// 注册指定程序集中符合条件的所有类型
-        /// </summary>
-        /// <param name="assembly"></param>
-        /// <param name="interfaceSuffix">接口后缀，如果：Service、Repository等</param>
-        /// <param name="style"></param>
-        /// <param name="filter"></param>
-        /// <returns>成功注册的类型数量</returns>
         public int RegisterAssemblyByInterfaceSuffix(Assembly assembly, string interfaceSuffix, ServiceLifeStyle style, Func<Type, Type, bool> filter = null)
         {
             if (string.IsNullOrWhiteSpace(interfaceSuffix))
@@ -112,14 +72,6 @@ namespace Sean.Core.DependencyInjection
             return RegisterInterfaceTypes(interfaceTypes, types, style, filter);
         }
 
-        /// <summary>
-        /// 注册指定程序集中符合条件的所有类型
-        /// </summary>
-        /// <param name="assembly"></param>
-        /// <param name="inheritedInterfaceType">继承的接口类型</param>
-        /// <param name="style"></param>
-        /// <param name="filter"></param>
-        /// <returns>成功注册的类型数量</returns>
         public int RegisterAssemblyByInheritedInterfaceType(Assembly assembly, Type inheritedInterfaceType, ServiceLifeStyle style, Func<Type, Type, bool> filter = null)
         {
             if (inheritedInterfaceType == null || !inheritedInterfaceType.IsInterface)
@@ -134,21 +86,11 @@ namespace Sean.Core.DependencyInjection
         #endregion
 
         #region 解析类型
-        /// <summary>
-        /// 构造函数注入解析
-        /// </summary>
-        /// <typeparam name="TService"></typeparam>
-        /// <returns></returns>
         public TService Resolve<TService>()
         {
             return (TService)Resolve(typeof(TService));
         }
 
-        /// <summary>
-        /// 构造函数注入解析
-        /// </summary>
-        /// <param name="serviceType"></param>
-        /// <returns></returns>
         public object Resolve(Type serviceType)
         {
             var diObservers = new LinkedList<DIObserver>();
