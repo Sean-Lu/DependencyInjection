@@ -60,7 +60,7 @@ namespace Sean.Core.DependencyInjection
         /// <param name="style"></param>
         /// <param name="filter"></param>
         /// <returns>成功注册的类型数量</returns>
-        int RegisterAssemblyByInterfaceSuffix(Assembly assembly, string interfaceSuffix, ServiceLifeStyle style, Func<Type, Type, bool> filter = null);
+        int RegisterByInterfaceSuffix(Assembly assembly, string interfaceSuffix, ServiceLifeStyle style, Func<Type, Type, bool> filter = null);
 
         /// <summary>
         /// 注册指定程序集中符合条件的所有类型
@@ -70,6 +70,6 @@ namespace Sean.Core.DependencyInjection
         /// <param name="style"></param>
         /// <param name="filter"></param>
         /// <returns>成功注册的类型数量</returns>
-        int RegisterAssemblyByInheritedInterfaceType(Assembly assembly, Type inheritedInterfaceType, ServiceLifeStyle style, Func<Type, Type, bool> filter = null);
+        int RegisterByInheritedInterfaceType(Assembly assembly, Type inheritedInterfaceType, ServiceLifeStyle style, Func<Type, Type, bool> filter = null);
     }
 }

@@ -17,8 +17,8 @@ namespace Example.Application.Extensions
         {
             // Services注入
             //container.RegisterType<ITestService, TestService>(ServiceLifeStyle.Transient);
-            container.RegisterAssemblyByInterfaceSuffix(Assembly.GetExecutingAssembly(), "Service", ServiceLifeStyle.Transient);
-            //container.RegisterAssemblyByInheritedInterfaceType(Assembly.GetExecutingAssembly(), typeof(IBaseService), ServiceLifeStyle.Transient);
+            container.RegisterByInterfaceSuffix(Assembly.GetExecutingAssembly(), "Service", ServiceLifeStyle.Transient);
+            //container.RegisterByInheritedInterfaceType(Assembly.GetExecutingAssembly(), typeof(IBaseService), ServiceLifeStyle.Transient);
 
             container.AddDomainDI();
         }

@@ -62,7 +62,7 @@ namespace Sean.Core.DependencyInjection
             _diTypeMap.AddOrUpdate(serviceType, obj, (key, value) => obj);
         }
 
-        public int RegisterAssemblyByInterfaceSuffix(Assembly assembly, string interfaceSuffix, ServiceLifeStyle style, Func<Type, Type, bool> filter = null)
+        public int RegisterByInterfaceSuffix(Assembly assembly, string interfaceSuffix, ServiceLifeStyle style, Func<Type, Type, bool> filter = null)
         {
             if (string.IsNullOrWhiteSpace(interfaceSuffix))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(interfaceSuffix));
@@ -72,7 +72,7 @@ namespace Sean.Core.DependencyInjection
             return RegisterInterfaceTypes(interfaceTypes, types, style, filter);
         }
 
-        public int RegisterAssemblyByInheritedInterfaceType(Assembly assembly, Type inheritedInterfaceType, ServiceLifeStyle style, Func<Type, Type, bool> filter = null)
+        public int RegisterByInheritedInterfaceType(Assembly assembly, Type inheritedInterfaceType, ServiceLifeStyle style, Func<Type, Type, bool> filter = null)
         {
             if (inheritedInterfaceType == null || !inheritedInterfaceType.IsInterface)
             {
