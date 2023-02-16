@@ -4,7 +4,7 @@ using Sean.Utility.Impls.Log;
 
 namespace Example.Infrastructure.Extensions
 {
-    public static class DIContainerExtensions
+    public static class DIExtensions
     {
         /// <summary>
         /// 基础设施层依赖注入

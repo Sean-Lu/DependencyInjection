@@ -4,6 +4,7 @@ using Example.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Sean.Core.DbRepository;
+using Sean.Core.DbRepository.Dapper;
 using Sean.Utility.Contracts;
 
 namespace Example.Domain.Repositories
@@ -20,16 +21,18 @@ namespace Example.Domain.Repositories
             _logger = logger;
         }
 
-        public override void OutputExecutedSql(string sql, object param)
+        protected override void OnSqlExecuted(SqlExecutedContext context)
         {
-            _logger.LogInfo($"执行了SQL：{sql}{Environment.NewLine}入参：{JsonConvert.SerializeObject(param, Formatting.Indented)}");
+            base.OnSqlExecuted(context);
+
+            _logger.LogInfo($"执行了SQL：{context.Sql}{Environment.NewLine}入参：{JsonConvert.SerializeObject(context.SqlParameter, Formatting.Indented)}");
         }
 
         public void Hello()
         {
             var tableName = TableName();
             var isTableExists = IsTableExists(tableName);
-            _logger.LogInfo($"表[{tableName}]是否存在：{isTableExists}");
+            _logger.LogInfo($"[{tableName}]表是否存在：{isTableExists}");
         }
     }
 }
