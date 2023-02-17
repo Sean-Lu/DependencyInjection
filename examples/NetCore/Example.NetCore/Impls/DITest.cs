@@ -20,7 +20,7 @@ namespace Example.NetCore.Impls
         public void Execute()
         {
             #region 依赖注入
-            DependencyManager.Register(container =>
+            DIManager.Register(container =>
             {
                 // Configuration注入
                 var configurationBuilder = new ConfigurationBuilder()
@@ -35,14 +35,14 @@ namespace Example.NetCore.Impls
             });
             #endregion
 
-            ILogger logger = DependencyManager.Container.Resolve<ILogger<DITest>>();
+            ILogger logger = DIManager.Container.Resolve<ILogger<DITest>>();
             logger.LogInfo("这是一条测试日志");
 
-            IConfiguration configuration = DependencyManager.Container.Resolve<IConfiguration>();
+            IConfiguration configuration = DIManager.Container.Resolve<IConfiguration>();
             var loggerSection = configuration.GetSection("SimpleLocalLoggerOptions");
             logger.LogInfo($"Logger configuration: [{nameof(SimpleLocalLoggerOptions.LogToConsole)}:{loggerSection.GetValue<bool>(nameof(SimpleLocalLoggerOptions.LogToConsole))}] [{nameof(SimpleLocalLoggerOptions.LogToLocalFile)}:{loggerSection.GetValue<bool>(nameof(SimpleLocalLoggerOptions.LogToLocalFile))}]");
 
-            ITestService testService = DependencyManager.Container.Resolve<ITestService>();
+            ITestService testService = DIManager.Container.Resolve<ITestService>();
             testService.Hello("靓仔！！！");
         }
     }
