@@ -35,10 +35,13 @@ namespace Example.Domain.Extensions
             //DatabaseType.SQLite.SetDbProviderMap(new DbProviderMap("System.Data.SQLite", "System.Data.SQLite.SQLiteFactory,System.Data.SQLite"));// SQLite
             #endregion
 
-            DbFactory.BulkCountLimit = 200;
-            //DbFactory.OnSqlExecuting += OnSqlExecuting;
-            //DbFactory.OnSqlExecuted += OnSqlExecuted;
-            //DbFactory.JsonSerializer = NewJsonSerializer.Instance;
+            DbContextConfiguration.Configure(options =>
+            {
+                options.BulkEntityCount = 200;
+                //options.SqlExecuting += OnSqlExecuting;
+                //options.SqlExecuted += OnSqlExecuted;
+                //options.JsonSerializer = NewJsonSerializer.Instance;
+            });
 
             #endregion
         }

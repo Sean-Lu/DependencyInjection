@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.28" />
-    <PackageReference Include="Sean.Core.DbRepository.Dapper" Version="2.1.8" />
+    <PackageReference Include="MySql.Data" Version="8.0.33" />
+    <PackageReference Include="Sean.Core.DbRepository.Dapper" Version="2.1.12" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,7 @@ using Sean.Utility.Contracts;
 
 namespace Example.Domain.Repositories
 {
-    public class TestRepository : BaseRepository<TestEntity>, ITestRepository
+    public class TestRepository : DapperBaseRepository<TestEntity>, ITestRepository
     {
         private readonly ILogger _logger;
 

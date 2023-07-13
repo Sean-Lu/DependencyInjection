@@ -1,15 +1,7 @@
 ## 简介
 
 > 依赖注入（`Dependency Injection`）是用于实现`IOC`（`Inversion of Control`，控制反转）的最常见的方式之一，可以达到解耦的目的。
-> 
-> 常见的`IOC`框架：
 
-| IOC框架                                                                | 说明                |
-| -------------------------------------------------------------------- | ----------------- |
-| `ServiceCollection`                                                  | .NET Core内置的IOC容器 |
-| [`Autofac`](https://github.com/autofac/Autofac)                      |                   |
-| [`SimpleInjector`](https://github.com/simpleinjector/SimpleInjector) |                   |
-| **Sean.Core.DependencyInjection**                                    | 当前项目              |
 
 ## Packages
 
@@ -31,7 +23,7 @@ PM> Install-Package Sean.Core.DependencyInjection
 
 > 实现原理：反射 + 递归（依赖解析） + 链表 + 缓存
 
-- 本项目支持依赖注入的方式：构造函数
+- 支持依赖注入的方式：构造函数
 - 如果`ImplementationInstance`和`ImplementationFactory`属性均为null，那么会通过`ImplementationType`属性选择一个适合的构造函数来创建最终的服务实例。
 
 ```
